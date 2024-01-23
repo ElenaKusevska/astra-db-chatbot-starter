@@ -1,4 +1,3 @@
-astrapy==0.7.0
 python-dotenv==1.0.0
 fastapi==0.109.0
 uvicorn[standard]
