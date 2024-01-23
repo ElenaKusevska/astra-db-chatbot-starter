@@ -1,4 +1,3 @@
-from langchain.prompts import PromptTemplate
 from langchain_openai import OpenAI
 from langchain_openai import OpenAIEmbeddings
 
@@ -38,11 +37,7 @@ def get_similar_docs(query, number):
     docs_contents = [row['answer'] for row in relevant_docs]
     docs_urls = [row['document_id'] for row in relevant_docs]
     return docs_contents, docs_urls
-# prompt that is sent to openai using the response from the vector database and the users original query
-prompt_boilerplate = "Answer the question posed in the user query section using the provided context. If you don't know the answer, just say that you don't know, don't try to make up an answer. Also remark on whether the provided context was useful in generating the answer and why."
-user_query_boilerplate = "USER QUERY: {userQuery}"
-document_context_boilerplate = "CONTEXT: {documentContext}"
-final_answer_boilerplate = "Final Answer: "
+
 
 def build_full_prompt(query):
     relevant_docs, urls = get_similar_docs(query, 3)
@@ -50,10 +45,12 @@ def build_full_prompt(query):
     url = urls[0] # set(urls)
     print(url)
 
-    nl = "\n"
-    combined_prompt_template = PromptTemplate.from_template(prompt_boilerplate + nl + user_query_boilerplate + nl + document_context_boilerplate + nl + final_answer_boilerplate)
-    filled_prompt_template = combined_prompt_template.format(userQuery=query, documentContext=docs_single_string)
-    return filled_prompt_template, url
+    # prompt that is sent to openai using the response from the vector database and the users original query
+    prompt = ''' Answer the question posed in the user query section using the provided context. If you don't know the answer, just say that you don't know, don't try to make up an answer. Also remark on whether the provided context was useful in generating the answer and why."
+    user_query_boilerplate = USER QUERY: {query}
+    document_context_boilerplate = CONTEXT: {docs_single_string}
+    final_answer_boilerplate = Final Answer: '''
+    return prompt, url
 
 
 def send_to_openai(full_prompt):
