@@ -46,7 +46,7 @@ def build_full_prompt(query):
     print(url)
 
     # prompt that is sent to openai using the response from the vector database and the users original query
-    prompt = ''' Answer the question posed in the user query section using the provided context. If you don't know the answer, just say that you don't know, don't try to make up an answer. Also remark on whether the provided context was useful in generating the answer and why."
+    prompt = f''' Answer the question posed in the user query section using the provided context. If you don't know the answer, just say that you don't know, don't try to make up an answer. Also remark on whether the provided context was useful in generating the answer and why.
     user_query_boilerplate = USER QUERY: {query}
     document_context_boilerplate = CONTEXT: {docs_single_string}
     final_answer_boilerplate = Final Answer: '''
